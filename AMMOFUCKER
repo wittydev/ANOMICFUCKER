@@ -1,0 +1,18 @@
+local GunNames = {
+    "Handgun",
+    "Revolver",
+    "Mini MP",
+    }
+    
+local LocalPlayer = game.Players.LocalPlayer
+
+local Player = workspace.RayIgnore:FindFirstChild(LocalPlayer.Name)
+
+while wait(1) do
+   for i,v in pairs(Player:GetDescendants()) do
+        if v.Name == "Mag" then
+            v.Value = 999999999
+        end
+    end
+end
+
