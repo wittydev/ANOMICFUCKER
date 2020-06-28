@@ -1,0 +1,25 @@
+local PlayerPlots = workspace.PlayerPlots -- THIS IS THE MOST PARENT FOLDER
+
+while wait(1) do
+
+    local Doors = {} -- nil for now
+    
+    for i,v in pairs(PlayerPlots:GetDescendants()) do
+        if v.Name == "DoorFire" then
+            
+            local Lockedvalue = v.Parent:FindFirstChild('DoorLocked')
+            
+            if Lockedvalue ~= nil then
+            
+                if Lockedvalue.Value == false then
+                 table.insert(Doors,v)
+                end
+            end
+        end
+    end
+    
+    
+    for i = 1, #Doors do
+        Doors[i]:FireServer()
+    end
+end
