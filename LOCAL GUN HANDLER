@@ -1,0 +1,110 @@
+-- Decompiled with the Synapse X Luau decompiler.
+
+local l___CS_Events__1 = game:GetService("ReplicatedStorage"):WaitForChild("_CS.Events");
+local l__ReplicatedStorage__2 = game.ReplicatedStorage;
+local l__mouse__3 = game.Players.LocalPlayer:GetMouse();
+local l__TweenService__4 = game:GetService("TweenService");
+local u1 = require(l__ReplicatedStorage__2.Client.ItemList);
+local function u2(p1, p2, p3, p4, p5)
+	if p4 ~= "Shotgun" then
+		p3.Parent.Mag.Value = p3.Parent.Mag.Value - 1;
+		local v5 = p3:Clone();
+		v5.Parent = p3.Parent;
+		v5.PlaybackSpeed = math.random(16, 20) / 18;
+		v5:Play();
+		v5.Ended:Connect(function()
+			v5:Destroy();
+		end);
+	end;
+	if p5 == true and u1[p3.Parent.Parent.Name].Slide == true then
+		for v6, v7 in pairs(p3.Parent.Parent.ToolModel.SlideOff:GetChildren()) do
+			v7.Transparency = 1;
+		end;
+		for v8, v9 in pairs(p3.Parent.Parent.ToolModel.SlideOn:GetChildren()) do
+			v9.Transparency = 0;
+		end;
+		delay(0.15, function()
+			if p3.Parent.Parent.Handle.Mag.Value > 0 then
+				for v10, v11 in pairs(p3.Parent.Parent.ToolModel.SlideOff:GetChildren()) do
+					v11.Transparency = 0;
+				end;
+				for v12, v13 in pairs(p3.Parent.Parent.ToolModel.SlideOn:GetChildren()) do
+					v13.Transparency = 1;
+				end;
+			end;
+		end);
+	end;
+	local l__Main__14 = p3.Parent.Parent:WaitForChild("Main");
+	l__Main__14.MuzzleFlash.ImageLabel.Rotation = math.random(0, 360);
+	l__Main__14.MuzzleFlash.Enabled = true;
+	l__Main__14.Smoke.Enabled = true;
+	local v15 = Instance.new("Part");
+	v15.Size = Vector3.new(0.01, 0.01, 0.01);
+	v15.Anchored = true;
+	v15.CanCollide = false;
+	v15.Transparency = 1;
+	v15.CFrame = CFrame.new(p1);
+	v15.Parent = workspace.RayIgnore;
+	local v16 = script.ImpactParticle:Clone();
+	v16.Parent = v15;
+	game:GetService("Debris"):AddItem(v15, v16.Lifetime.Max);
+	v16.Enabled = true;
+	wait(0.05);
+	l__Main__14.MuzzleFlash.Enabled = false;
+	v16.Enabled = false;
+	local v17 = l__ReplicatedStorage__2.ScriptStorage.BulletFlyby:Clone();
+	v17.Parent = v15;
+	v17:Play();
+	wait(0.3);
+	l__Main__14.Smoke.Enabled = false;
+end;
+l___CS_Events__1.GunDetailClient.Event:Connect(function(p6, p7, p8, p9)
+	l___CS_Events__1.RayDrawer:FireServer(p6, p7, p8, p9);
+	u2(p6, p7, p8, p9, true);
+end);
+l___CS_Events__1.RayDrawer.OnClientEvent:Connect(function(p10, p11, p12, p13)
+	u2(p10, p11, p12, p13, false);
+end);
+script.Parent.ChildRemoved:Connect(function(p14)
+	game.Players.LocalPlayer:Kick("Something has gone wrong. :pensive:");
+end);
+local l__HitCross__3 = script.Parent.Parent.MainUIHolder.HitCross;
+game:GetService("RunService").RenderStepped:Connect(function()
+	l__HitCross__3.Position = UDim2.new(0, l__mouse__3.X, 0, l__mouse__3.Y);
+end);
+function settext(p15, p16)
+	if 0.95 < l__HitCross__3.Damage.TextTransparency then
+		l__HitCross__3.Damage.Text = p15 * p16;
+		return;
+	end;
+	l__HitCross__3.Damage.Text = tonumber(l__HitCross__3.Damage.Text) + p15 * p16;
+end;
+function checkvalid(p17)
+	if p17.Character.Team.Value == "Government" then
+		if p17.Character.Wanted.Value ~= 1 then
+
+		else
+			return false;
+		end;
+	end;
+	return true;
+end;
+local u4 = l__TweenService__4:Create(l__HitCross__3.Damage, TweenInfo.new(0.8), {
+	TextTransparency = 1
+});
+l___CS_Events__1.PlayerHit.Event:Connect(function(p18, p19)
+	if checkvalid == false then
+		return;
+	end;
+	u4:Cancel();
+	if p19 == "Head" then
+		l__HitCross__3.Damage.TextColor3 = Color3.fromRGB(170, 0, 0);
+		settext(p18, 1.8);
+	else
+		l__HitCross__3.Damage.TextColor3 = Color3.fromRGB(255, 255, 255);
+		settext(p18, 1);
+	end;
+	l__HitCross__3.Damage.TextTransparency = 0;
+	wait(0.4);
+	u4:Play();
+end);
