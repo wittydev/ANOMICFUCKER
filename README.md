@@ -7,4 +7,4 @@ Anomic was written fully by me, and was just made for fun.
 
 LINK TO SCRIPT:
 
-ANOMIC GUI.lua
+https://github.com/wittydev/ANOMICFUCKER/blob/master/ANOMIC%20GUI.lua
