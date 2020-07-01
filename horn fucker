@@ -1,0 +1,14 @@
+
+while wait() do
+    for i,v in pairs(workspace.PlayerVehicles:GetChildren()) do
+         game.ReplicatedStorage["_CS.Events"].Horn:FireServer(v.VehicleSeat)
+    end
+        wait(0.6)
+    for i,v in pairs(workspace.PlayerVehicles:GetChildren()) do
+         game.ReplicatedStorage["_CS.Events"].Horn:FireServer(v.VehicleSeat,"End")
+    end
+    
+    wait(0.6)
+
+end
+
